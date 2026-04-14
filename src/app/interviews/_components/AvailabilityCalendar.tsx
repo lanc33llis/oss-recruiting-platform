@@ -50,24 +50,14 @@ interface Availability {
   system?: System;
 }
 
-interface Interview {
-  id: string;
-  applicationId: string;
-  scheduledAt: Date;
-}
-
 export function AvailabilityCalendar({
   initialAvailabilities = [],
 
   systems = [],
-
-  scheduledInterviews = [],
 }: {
   initialAvailabilities?: Availability[];
 
   systems?: System[];
-
-  scheduledInterviews?: Interview[];
 }) {
   const router = useRouter();
 
@@ -168,59 +158,8 @@ export function AvailabilityCalendar({
                 </div>
               </div>
             </div>
-            {/* Interview Table Section */}
+            {/* Availabilities Table Section */}
             <div className="grow">
-              <div className="max-h-128 overflow-y-auto rounded-md border">
-                <table className="min-w-full text-sm">
-                  <thead className="bg-muted/50 sticky top-0 z-10">
-                    <tr>
-                      <th className="px-4 py-2 text-left font-medium">
-                        Interviewee
-                      </th>
-                      <th className="px-4 py-2 text-left font-medium">Date</th>
-                      <th className="px-4 py-2 text-left font-medium">Time</th>
-                      <th className="px-4 py-2"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {scheduledInterviews.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={4}
-                          className="text-muted-foreground py-4 text-center"
-                        >
-                          You have no scheduled interviews.
-                        </td>
-                      </tr>
-                    ) : (
-                      scheduledInterviews.map((scheduledInterview) => (
-                        <tr
-                          key={scheduledInterview.id}
-                          className="border-b last:border-b-0"
-                        >
-                          <td className="px-4 py-2">
-                            {scheduledInterview.applicationId}
-                          </td>
-                          <td className="px-4 py-2">
-                            {format(
-                              new Date(scheduledInterview.scheduledAt),
-                              "MMM dd, yyyy",
-                            )}
-                          </td>
-                          <td className="px-4 py-2">
-                            {format(new Date(scheduledInterview.scheduledAt), "HH:mm")}
-                          </td>
-                          <td className="px-4 py-2">
-                            ...
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {/* <div className="grow">
               <div className="max-h-128 overflow-y-auto rounded-md border">
                 <table className="min-w-full text-sm">
                   <thead className="bg-muted/50 sticky top-0 z-10">
@@ -295,7 +234,7 @@ export function AvailabilityCalendar({
                   </tbody>
                 </table>
               </div>
-            </div> */}
+            </div>
           </div>
         </CardContent>
       </Card>
