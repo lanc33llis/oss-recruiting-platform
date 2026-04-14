@@ -220,7 +220,7 @@ export function AvailabilityCalendar({
                 </table>
               </div>
             </div>
-            <div className="grow">
+            {/* <div className="grow">
               <div className="max-h-128 overflow-y-auto rounded-md border">
                 <table className="min-w-full text-sm">
                   <thead className="bg-muted/50 sticky top-0 z-10">
@@ -295,7 +295,7 @@ export function AvailabilityCalendar({
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card>
