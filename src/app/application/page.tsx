@@ -96,8 +96,6 @@ export default async function ApplicationsPage() {
       </div>
       <div className="absolute left-0 w-full border-b" />
       <div className="flex flex-col">
-        <br />
-        <p>
         {/* {cycles.map((cycle) => {
           const openForApplications =
             cycle.stage === "APPLICATION" &&
@@ -205,7 +203,6 @@ export default async function ApplicationsPage() {
         
         
         }
-        </p>
       </div>
     </>
   );
