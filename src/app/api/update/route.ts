@@ -4,6 +4,7 @@ import { applicationCycles, applications } from "~/server/db/schema";
 import { Resend } from "resend";
 import { env } from "~/env";
 import { EmailTemplate } from "./template";
+import { appConfig } from "~/config";
 
 const resend = new Resend(env.RESEND_TOKEN);
 
@@ -63,9 +64,9 @@ const GET = async () => {
           const batch = applicationInStage.slice(i, i + batchSize);
           await resend.batch.send(
             batch.map((app) => ({
-              from: "Longhorn Racing <lhr@platformzinc.dev>",
+              from: `${appConfig.organization.name} <${appConfig.email.transactionalFromAddress}>`,
               to: app.user.email,
-              subject: `Application Update for ${app.team.name}`,
+              subject: `${appConfig.email.applicationUpdateSubjectPrefix} ${app.team.name}`,
               react: EmailTemplate({ name: app.user.name! }),
               idempotencyKey: `application-update-${app.id}-${stage.stage}-${new Date().toISOString().split("T")[0]}`,
             })),

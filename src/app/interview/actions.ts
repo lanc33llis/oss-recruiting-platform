@@ -4,17 +4,15 @@ import { db } from "~/server/db";
 import {
   interviews,
   applications,
-  users,
-  systems,
   availabilities,
 } from "~/server/db/schema";
-import { eq, and, gte, lte, or } from "drizzle-orm";
+import { eq, and, gte, lte } from "drizzle-orm";
 import { addMinutes, startOfDay, endOfDay, isAfter } from "date-fns";
 import { auth } from "~/server/auth";
 // import { transporter } from "../api/update/route";
+import { appConfig } from "~/config";
 import ical, {
   ICalAlarmType,
-  ICalAttendee,
   ICalCalendarMethod,
 } from "ical-generator";
 
@@ -229,19 +227,19 @@ export async function scheduleInterview(
   });
 
   const calendarEvent = ical({
-    name: `Longhorn Racing Recruitment Interview with ${application.team.name}`,
+    name: `${appConfig.email.interviewCalendarLabel} with ${application.team.name}`,
     method: ICalCalendarMethod.REQUEST,
   });
 
   const event = calendarEvent.createEvent({
     start: startTime,
     end: endTime,
-    summary: `Interview for ${application.team.name}`,
+    summary: `${appConfig.email.interviewInviteSubjectPrefix} ${application.team.name}`,
     description: `You have an interview scheduled for the ${application.team.name} team.`,
-    location: "Video Call", // Default location
+    location: appConfig.email.interviewLocation,
     organizer: {
-      name: "Longhorn Racing Recruitment",
-      email: "longhornracingrecruitment@gmail.com",
+      name: appConfig.email.fromName,
+      email: appConfig.email.recruitingFromAddress,
     },
   });
 
@@ -252,10 +250,10 @@ export async function scheduleInterview(
   });
 
   // await transporter.sendMail({
-  //   from: "Longhorn Racing <longhornracingrecruitment@gmail.com>",
+  //   from: `${appConfig.organization.name} <${appConfig.email.recruitingFromAddress}>`,
   //   to: session.user.email!,
-  //   subject: `Application Update for ${application.team.name}`,
-  //   text: `Dear applicant,\n\nYour interview for the ${application.team.name} team has been scheduled.\n\nDate: ${startTime.toLocaleDateString()}\nTime: ${startTime.toLocaleTimeString()}\nDuration: 30 minutes\nLocation: Video Call\n\nSincerely,\nLonghorn Racing Recruitment\nhttps://recruiting.longhornracing.org/`,
+  //   subject: `${appConfig.email.interviewInviteSubjectPrefix} ${application.team.name}`,
+  //   text: `Dear applicant,\n\nYour interview for the ${application.team.name} team has been scheduled.\n\nDate: ${startTime.toLocaleDateString()}\nTime: ${startTime.toLocaleTimeString()}\nDuration: 30 minutes\nLocation: ${appConfig.email.interviewLocation}\n\nSincerely,\n${appConfig.email.fromName}\n${appConfig.email.baseUrl}`,
   //   icalEvent: {
   //     filename: "interview.ics",
   //     method: "request",

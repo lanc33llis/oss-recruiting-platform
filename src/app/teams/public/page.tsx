@@ -1,9 +1,10 @@
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { db } from "~/server/db";
+import { appConfig } from "~/config";
 
 const TeamPublicPage = async () => {
   const teams = await db.query.teams.findMany({
@@ -14,11 +15,9 @@ const TeamPublicPage = async () => {
 
   return (
     <>
-      <h1 className="text-2xl font-medium">Teams</h1>
+      <h1 className="text-2xl font-medium">{appConfig.pages.publicTeams.title}</h1>
       <p className="text-muted-foreground max-w-5xl pb-6">
-        Longhorn Racing is composed of three Collegiate Design Series teams.
-        Each one specializing in addressing the unique challenges of their
-        competition.
+        {appConfig.pages.publicTeams.description}
       </p>
       <div className="absolute left-0 w-full border-b" />
       {teams.map((team) => {
@@ -38,7 +37,7 @@ const TeamPublicPage = async () => {
             <div className="pt-2">
               <p className="text-muted-foreground">{team.description}</p>
               <p className="text-muted-foreground">
-                The following systems are recruiting:
+                {appConfig.pages.publicTeams.systemsHeading}
               </p>
               <div className="flex flex-col gap-2 pt-2">
                 {team.systems.map((system) => (
@@ -59,7 +58,7 @@ const TeamPublicPage = async () => {
                     <span className="text-muted-foreground inline-block w-full break-words whitespace-break-spaces">
                       {(system.description?.length ?? 0) > 0
                         ? system.description
-                        : "No subsystems"}
+                        : appConfig.pages.publicTeams.emptySystemDescription}
                     </span>
                   </Link>
                 ))}
@@ -71,7 +70,7 @@ const TeamPublicPage = async () => {
                 as={`/teams/${team.id}`}
                 className={cn(buttonVariants(), "group")}
               >
-                Learn more{" "}
+                {appConfig.pages.publicTeams.learnMoreLabel}{" "}
                 <ChevronRightIcon className="transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>

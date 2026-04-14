@@ -13,7 +13,7 @@ import { type JSONContent } from "@tiptap/react";
 import Editor from "./_components/editor";
 import { hasPermission, UserRbac } from "~/server/lib/rbac";
 import ReadOnly from "~/app/teams/[teamId]/_components/read-only";
-import { unstable_cacheLife } from "next/cache";
+import { cacheLife } from "next/cache";
 
 async function getSystem(systemId: string) {
   return await db.query.systems.findFirst({
@@ -30,7 +30,7 @@ async function getSystem(systemId: string) {
 
 export async function generateContent(mdx: string | null) {
   "use cache";
-  unstable_cacheLife("days");
+  cacheLife("days");
 
   if (!mdx) return "";
   const html = generateHTML(JSON.parse(mdx) as JSONContent, [StarterKit]);

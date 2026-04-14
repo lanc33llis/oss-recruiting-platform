@@ -13,6 +13,7 @@ import {
 } from "~/components/ui/tooltip";
 import { useState } from "react";
 import type { Session } from "next-auth";
+import { appConfig } from "~/config";
 
 function HeaderClient({
   session,
@@ -84,9 +85,8 @@ function HeaderClient({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="text-center text-sm">
-                    You have not uploaded a resume.
-                    <br /> You cannot submit applications until you upload a
-                    resume.
+                    {appConfig.identity.resumeWarningTitle}
+                    <br /> {appConfig.identity.resumeWarningDescription}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -98,9 +98,8 @@ function HeaderClient({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="text-center text-sm">
-                    Your EID email is not verified.
-                    <br /> You cannot submit applications until your email is
-                    verified.
+                    {appConfig.identity.unverifiedEmailTitle}
+                    <br /> {appConfig.identity.unverifiedEmailDescription}
                   </p>
                 </TooltipContent>
               </Tooltip>

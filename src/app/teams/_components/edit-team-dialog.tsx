@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -26,14 +26,21 @@ export function EditTeamDialog({ team }: { team: typeof teams.$inferSelect }) {
   });
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
+  const handleStateChange = useEffectEvent(() => {
     if (!state) return;
+
     if (state.errors && Object.keys(state.errors).length > 0) {
-      // Potentially show an error toast
-    } else if (state.message) {
-      toast.success(state.message);
-      setOpen(false);
+      return;
     }
+
+    if (!state.message) return;
+
+    toast.success(state.message);
+    setOpen(false);
+  });
+
+  useEffect(() => {
+    handleStateChange();
   }, [state]);
 
   return (

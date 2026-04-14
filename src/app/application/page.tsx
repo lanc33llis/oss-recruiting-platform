@@ -1,15 +1,12 @@
 import { db } from "~/server/db";
-import { ApplicationList } from "./_components/ApplicationList";
 import { auth } from "~/server/auth";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { ChevronRightIcon, PlusIcon } from "lucide-react";
+import { ChevronRightIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
-import Link from "next/link";
-import { cn } from "~/lib/utils";
 import { getTeams } from "../people/page";
 import { applications } from "~/server/db/schema";
 import CreateApplicationOrRedirect from "./_components/create-application-or-redirect";
 import { redirect } from "next/navigation";
+import { appConfig } from "~/config";
 
 async function createApplication(teamId: string) {
   "use server";
@@ -84,14 +81,16 @@ export default async function ApplicationsPage() {
   return (
     <>
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Applications</h1>
+        <h1 className="text-2xl font-medium">
+          {appConfig.pages.application.title}
+        </h1>
         <p className="text-muted-foreground">
-          View and manage your applications for the Longhorn Racing team.
+          {appConfig.pages.application.description}
         </p>
         <p className="text-muted-foreground">
           {(cycles.some((cycle) => cycle.stage === "APPLICATION") &&
-            "We are accepting applications.") ||
-            "We're currently not accepting applications."}
+            appConfig.pages.application.openMessage) ||
+            appConfig.pages.application.closedMessage}
         </p>
       </div>
       <div className="absolute left-0 w-full border-b" />

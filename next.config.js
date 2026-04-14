@@ -7,15 +7,9 @@ import createMDX from "@next/mdx";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  cacheComponents: true,
   images: {
     remotePatterns: [new URL("https://static.wixstatic.com/**")],
-  },
-  experimental: {
-    useCache: true,
-  },
-  // bad but okay for now
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,

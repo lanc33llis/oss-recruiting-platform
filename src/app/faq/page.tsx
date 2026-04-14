@@ -13,7 +13,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { type JSONContent } from "@tiptap/react";
 import { nanoid } from "nanoid";
 import FaqEditor from "./_components/faq-editor";
-import { unstable_cacheLife } from "next/cache";
+import { cacheLife } from "next/cache";
 
 async function getFaq() {
   const currFaq = await db.query.faq.findFirst();
@@ -27,7 +27,7 @@ async function getFaq() {
 
 export async function generateContent(mdx: string | null) {
   "use cache";
-  unstable_cacheLife("minutes");
+  cacheLife("minutes");
 
   if (!mdx) return "";
   const html = generateHTML(JSON.parse(mdx) as JSONContent, [StarterKit]);

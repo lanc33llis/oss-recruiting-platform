@@ -8,14 +8,13 @@ import { db } from "~/server/db";
 
 import { blacklistedEids, users } from "~/server/db/schema";
 import { and, eq, isNotNull, sql } from "drizzle-orm";
-import { unstable_cacheTag } from "next/cache";
-import { unstable_cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 async function getBlacklist() {
   "use cache";
 
-  unstable_cacheTag("blacklist");
-  unstable_cacheLife("hours");
+  cacheTag("blacklist");
+  cacheLife("hours");
 
   return await db
     .select()

@@ -7,14 +7,12 @@ import { auth } from "~/server/auth";
 import { applications } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import Rejected from "./_components/rejected";
-import Link from "next/link";
-import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
 import TrialWorkday from "./_components/trial-workday";
 import Waitlist from "./_components/waitlist";
 import Accepted from "./_components/accepted";
 import Interview from "./_components/interview";
 import InReview from "./_components/in-review";
+import { appConfig } from "~/config";
 
 const AppPage = async ({
   params,
@@ -55,12 +53,11 @@ const AppPage = async ({
     <>
       <div className="pb-6">
         <h1 className="text-2xl font-medium">
-          Your {application.team.name} Application
+          {appConfig.pages.applicationDetail.titlePrefix} {application.team.name}{" "}
+          Application
         </h1>
         <p className="text-muted-foreground">
-          View and manage your application for the {application.team.name} team.
-          You can edit your application details, upload documents, and submit
-          your application.
+          {appConfig.pages.applicationDetail.description(application.team.name)}
         </p>
       </div>
       <div className="absolute left-0 w-full border-b" />
@@ -117,7 +114,7 @@ const AppPage = async ({
               }
 
               if (!application.user.eidEmailVerified) {
-                return "You must verify your EID email before submitting your application.";
+                return appConfig.identity.submissionRequiresVerifiedEmailMessage;
               }
 
               const session = await auth();

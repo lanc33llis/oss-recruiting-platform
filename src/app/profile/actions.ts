@@ -7,14 +7,19 @@ import { db } from "~/server/db";
 import { emailVerifications, users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { appConfig } from "~/config";
 // import { transporter } from "../api/update/route";
+
+const requiredEmailSuffix = `@${appConfig.identity.requiredEmailDomain}`;
+const hasRequiredEmailDomain = (email: string) =>
+  email.endsWith(requiredEmailSuffix);
 
 const updateProfileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z
     .string()
     .email("Valid email is required")
-    .refine((s) => s.endsWith("@eid.utexas.edu")),
+    .refine(hasRequiredEmailDomain),
   phoneNumber: z.string().max(20, "Phone number must be 20 characters or less"),
   major: z.string(),
 });
@@ -31,7 +36,7 @@ export async function revalidateEmail(email: string) {
   });
 
   if (userWithVerifiedEidEmail) {
-    return { success: false, error: "This eid email is already in use." };
+    return { success: false, error: appConfig.identity.duplicateEmailError };
   }
 
   await db
@@ -50,12 +55,13 @@ export async function revalidateEmail(email: string) {
     .returning();
   const verification = verificationInsert[0]!;
 
-  const mailOptions = {
-    from: "Longhorn Racing Recruitment <longhornracingrecruitment@gmail.com>",
+  const verificationEmail = {
+    from: `${appConfig.email.fromName} <${appConfig.email.recruitingFromAddress}>`,
     to: email,
-    subject: `LHR Recruiting Email Verification`,
-    text: `Please verify your email at https://recruiting.longhornracing.org/verify/${verification.token}`,
+    subject: appConfig.email.verificationSubject,
+    text: `Please verify your email at ${appConfig.email.baseUrl}/verify/${verification.token}`,
   };
+  void verificationEmail;
 
   // await transporter.sendMail(mailOptions);
 }
@@ -77,14 +83,17 @@ export async function updateProfile(formData: FormData) {
     return {
       success: false,
       error:
-        "Invalid form data. Email must end with eid.utexas.edu, and phone number must be valid. Major must be provided.",
+        `Invalid form data. Email must end with ${requiredEmailSuffix}, phone number must be valid, and major must be provided.`,
     };
   }
 
   const { name, email, phoneNumber, major } = validatedFields.data;
 
-  if (!email.endsWith("eid.utexas.edu")) {
-    return { success: false, error: "Email must end with @eid.utexas.edu" };
+  if (!hasRequiredEmailDomain(email)) {
+    return {
+      success: false,
+      error: `Email must end with ${requiredEmailSuffix}`,
+    };
   }
 
   const needsToRevalidateEmail = !!(email && session.user.eidEmail !== email);

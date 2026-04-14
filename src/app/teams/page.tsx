@@ -1,12 +1,10 @@
-import { api } from "~/trpc/react";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
-  Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { ChevronsUpDown, NotebookIcon, StickyNoteIcon } from "lucide-react";
+import { ChevronsUpDown, StickyNoteIcon } from "lucide-react";
 
 import { db } from "~/server/db";
 import { cn } from "~/lib/utils";
@@ -23,6 +21,7 @@ import { hasPermission } from "~/server/lib/rbac";
 import { auth } from "~/server/auth";
 import { notFound } from "next/navigation";
 import { EditSystemDialog } from "./_components/edit-system-dialog";
+import { appConfig } from "~/config";
 
 // Placeholder components for TeamList, SystemList, etc.
 // These will be fleshed out later.
@@ -50,20 +49,15 @@ const TeamsPage = async () => {
   return (
     <>
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Teams</h1>
-        <p className="text-muted-foreground">
-          View and manage your teams for the Longhorn Racing team. You can
-          create new teams, view existing teams, and manage team members.
-        </p>
+        <h1 className="text-2xl font-medium">{appConfig.pages.teams.title}</h1>
+        <p className="text-muted-foreground">{appConfig.pages.teams.description}</p>
       </div>
       <div className="absolute left-0 w-full border-b" />
       <div className="pt-8">
         <CardHeader className="flex flex-row items-start justify-between px-0 pb-4">
           <div>
-            <CardTitle>Overview</CardTitle>
-            <CardDescription>
-              Manage your teams and their members.
-            </CardDescription>
+            <CardTitle>{appConfig.pages.teams.overviewTitle}</CardTitle>
+            <CardDescription>{appConfig.pages.teams.overviewDescription}</CardDescription>
           </div>
           {session.user.role === "ADMIN" && <CreateTeamDialog />}
         </CardHeader>

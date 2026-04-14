@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation";
-import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
-import { isAtLeast, UserRbac } from "~/server/lib/rbac";
+import { isAtLeast } from "~/server/lib/rbac";
 import Search from "./_components/search";
 
 import { updateUserRoleAndTeam } from "./actions";
 import { teams as teamsTable, userRoleEnum } from "~/server/db/schema";
-import { eq, type InferSelectModel } from "drizzle-orm";
+import { type InferSelectModel } from "drizzle-orm";
 import UserRoleTeamForm from "./_components/UserRoleTeamForm";
 import { systems } from "../../server/db/schema";
+import { appConfig } from "~/config";
 
 export async function getTeams() {
   "use cache";
@@ -72,11 +72,8 @@ const Page = async ({
   return (
     <>
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">People Management</h1>
-        <p className="text-muted-foreground">
-          Manage the members of the Longhorn Racing team. You can view team
-          members, their roles, and manage their permissions.
-        </p>
+        <h1 className="text-2xl font-medium">{appConfig.pages.people.title}</h1>
+        <p className="text-muted-foreground">{appConfig.pages.people.description}</p>
       </div>
       <div className="absolute left-0 w-full border-b" />
       <div className="mt-4">

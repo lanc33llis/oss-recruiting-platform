@@ -2,31 +2,26 @@
 
 import { auth, signIn } from "~/server/auth";
 import type { Session } from "next-auth";
-import dynamic from "next/dynamic";
 import { isAtLeast } from "~/server/lib/rbac";
+import { appConfig } from "~/config";
 
 import HeaderClient from "./header-client";
 
-const defaultLinks = {
-  LHR: "/",
-  Teams: "/teams/public",
-  FAQ: "/faq",
-};
-const applicantLinks = {
-  Application: "/application",
-};
-const memberLinks = {
-  Applications: "/applications",
-  Interviews: "/interviews",
-};
-const managementLinks = {
-  People: "/people",
-  "Team Management": "/teams",
-};
-const adminLinks = {
-  Cycles: "/cycles",
-  Blacklist: "/admin/blacklist",
-};
+const defaultLinks = Object.fromEntries(
+  appConfig.navigation.public.map(({ label, href }) => [label, href]),
+);
+const applicantLinks = Object.fromEntries(
+  appConfig.navigation.applicant.map(({ label, href }) => [label, href]),
+);
+const memberLinks = Object.fromEntries(
+  appConfig.navigation.member.map(({ label, href }) => [label, href]),
+);
+const managementLinks = Object.fromEntries(
+  appConfig.navigation.management.map(({ label, href }) => [label, href]),
+);
+const adminLinks = Object.fromEntries(
+  appConfig.navigation.admin.map(({ label, href }) => [label, href]),
+);
 
 async function signInAction() {
   "use server";

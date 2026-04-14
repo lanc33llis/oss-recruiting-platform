@@ -5,14 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Upload, User, Mail, FileText, PhoneIcon } from "lucide-react";
+import { User, Mail, FileText, PhoneIcon } from "lucide-react";
 import type { User as UserType } from "next-auth";
 import { revalidateEmail, updateProfile } from "../actions";
 import { UploadButton } from "~/app/people/_components/upload-things";
-import Link from "next/link";
 import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
+import { appConfig } from "~/config";
 
 interface ProfileFormProps {
   user: UserType & {
@@ -53,7 +53,7 @@ export function ProfileForm({ user, resumeUrl }: ProfileFormProps) {
     } else {
       if (needsToRevalidateEmail) {
         toast.success(
-          "Profile updated successfully, you need to reverify your eid email",
+          appConfig.identity.reverifySuccessMessage,
           {},
         );
       } else {
@@ -87,7 +87,7 @@ export function ProfileForm({ user, resumeUrl }: ProfileFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">EID Email Address</Label>
+            <Label htmlFor="email">{appConfig.identity.verifiedEmailLabel}</Label>
             <div className="relative mt-1">
               <Mail className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
               <Input
@@ -138,16 +138,18 @@ export function ProfileForm({ user, resumeUrl }: ProfileFormProps) {
                     toast.error(res.error);
                   } else {
                     toast.success(
-                      "Verification email sent! Please check your inbox.",
+                      appConfig.identity.verificationSentMessage,
                     );
                   }
                 }}
               >
-                Re-send Verification Email
+                {appConfig.pages.profile.resendVerificationLabel}
               </Button>
             )}
             <Button onClick={handleSaveProfile} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save Changes"}
+              {isSaving
+                ? appConfig.pages.profile.savingLabel
+                : appConfig.pages.profile.saveChangesLabel}
             </Button>
           </div>
         </CardContent>

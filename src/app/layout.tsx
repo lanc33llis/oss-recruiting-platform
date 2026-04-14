@@ -8,14 +8,16 @@ import Header from "./_components/header";
 import Footer from "./_components/footer";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "~/components/ui/sonner";
+import { appConfig } from "~/config";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 export const metadata: Metadata = {
-  title: "Longhorn Racing | UT Austin",
-  description: "Longhorn Racing Recruiting Platform",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: appConfig.metadata.title,
+  description: appConfig.metadata.description,
+  icons: [{ rel: "icon", url: appConfig.metadata.iconPath }],
 };
 
 const geist = Geist({
@@ -44,13 +46,15 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="system"
           >
-            <main className="flex min-h-screen flex-col">
-              <Header />
-              <section className="relative container mx-auto grow border-x px-4 py-6">
-                {children}
-              </section>
-              <Footer />
-            </main>
+            <TooltipProvider>
+              <main className="flex min-h-screen flex-col">
+                <Header />
+                <section className="relative container mx-auto grow border-x px-4 py-6">
+                  {children}
+                </section>
+                <Footer />
+              </main>
+            </TooltipProvider>
           </ThemeProvider>
         </TRPCReactProvider>
         <Toaster />

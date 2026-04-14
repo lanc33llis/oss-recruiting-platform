@@ -1,37 +1,21 @@
-import type { InferSelectModel } from "drizzle-orm";
 import Link from "next/link";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import type { applications } from "~/server/db/schema";
+import { appConfig, getTrialWorkdayConfig } from "~/config";
 
 const TrialWorkday = ({ team }: { team: string }) => {
+  const trialConfig = getTrialWorkdayConfig(team);
+
+  if (!trialConfig) {
+    return <div>{appConfig.trialWorkday.intro}</div>;
+  }
+
   return (
     <div>
-      <p>As part of our next stage, please confirm your availability!</p>
-      {team === "Solar" && (
-        <Link
-          className={cn(buttonVariants({}), "mt-4")}
-          href={`https://forms.gle/Wot5StyzP9HCZtiN8`}
-        >
-          Schedule Solar Trial
-        </Link>
-      )}
-      {team === "Combustion" && (
-        <Link
-          className={cn(buttonVariants({}), "mt-4")}
-          href={`https://forms.gle/e2UZ7mdNdyjfENeG6`}
-        >
-          Schedule Combustion Trial
-        </Link>
-      )}
-      {team === "Electric" && (
-        <Link
-          className={cn(buttonVariants({}), "mt-4")}
-          href={`https://forms.gle/ytKMqDeAUkTYywuDA`}
-        >
-          Schedule Electric Trial
-        </Link>
-      )}
+      <p>{appConfig.trialWorkday.intro}</p>
+      <Link className={cn(buttonVariants({}), "mt-4")} href={trialConfig.href}>
+        {trialConfig.label}
+      </Link>
     </div>
   );
 };

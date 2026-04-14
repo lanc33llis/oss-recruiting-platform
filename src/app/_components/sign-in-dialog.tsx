@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { appConfig } from "~/config";
 
 const SignInDialog = ({
   signIn,
@@ -26,8 +27,7 @@ const SignInDialog = ({
       <DialogContent className="w-md">
         <DialogTitle className="text-center">Sign In</DialogTitle>
         <DialogDescription className="text-center">
-          You may sign in with any Google account, but you&apos;re required to
-          verify with your eid@eid.utexas.edu before submitting
+          {appConfig.identity.signInDescription}
         </DialogDescription>
         <div className="mt-8 space-y-1">
           <Button

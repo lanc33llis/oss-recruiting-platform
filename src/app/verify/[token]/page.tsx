@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { emailVerifications, users } from "~/server/db/schema";
+import { appConfig } from "~/config";
 
 const VerifyPage = async ({
   params,
@@ -16,10 +17,11 @@ const VerifyPage = async ({
   if (!token) {
     return (
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Verify Email</h1>
+        <h1 className="text-2xl font-medium">
+          {appConfig.identity.verificationPageTitle}
+        </h1>
         <p className="text-muted-foreground">
-          No verification token provided. Please check your email for the
-          verification link.
+          {appConfig.identity.verificationMissingTokenMessage}
         </p>
       </div>
     );
@@ -28,8 +30,12 @@ const VerifyPage = async ({
   if (!verificationEmail) {
     return (
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Verify Email</h1>
-        <p className="text-muted-foreground">Your email is verified!</p>
+        <h1 className="text-2xl font-medium">
+          {appConfig.identity.verificationPageTitle}
+        </h1>
+        <p className="text-muted-foreground">
+          {appConfig.identity.verificationAlreadyUsedMessage}
+        </p>
       </div>
     );
   }
@@ -37,10 +43,11 @@ const VerifyPage = async ({
   if (verificationEmail.expires <= new Date()) {
     return (
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Verify Email</h1>
+        <h1 className="text-2xl font-medium">
+          {appConfig.identity.verificationPageTitle}
+        </h1>
         <p className="text-muted-foreground">
-          The verification link has expired. Please request a new verification
-          email.
+          {appConfig.identity.verificationExpiredMessage}
         </p>
       </div>
     );
@@ -60,9 +67,11 @@ const VerifyPage = async ({
   return (
     <>
       <div className="pb-6">
-        <h1 className="text-2xl font-medium">Verify Email</h1>
+        <h1 className="text-2xl font-medium">
+          {appConfig.identity.verificationPageTitle}
+        </h1>
         <p className="text-muted-foreground">
-          Success! Your eid email has been verified.
+          {appConfig.identity.verificationSuccessMessage}
         </p>
       </div>
     </>

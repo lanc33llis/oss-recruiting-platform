@@ -30,7 +30,7 @@ export async function addToBlacklist(formData: FormData) {
   });
 
   revalidatePath("/admin/blacklist");
-  revalidateTag("blacklist");
+  revalidateTag("blacklist", "max");
 }
 
 // Remove an EID from the blacklist
@@ -45,5 +45,5 @@ export async function removeFromBlacklist(formData: FormData) {
   await db.delete(blacklistedEids).where(eq(blacklistedEids.eid, eid));
 
   revalidatePath("/admin/blacklist");
-  revalidateTag("blacklist");
+  revalidateTag("blacklist", "max");
 }

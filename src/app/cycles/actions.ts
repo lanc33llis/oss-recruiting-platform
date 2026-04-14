@@ -97,7 +97,7 @@ export async function createCycle(formData: FormData) {
 
   await db.insert(applicationCycleStages).values(stageData);
 
-  revalidatePath("/admin/cycles");
+  revalidatePath("/cycles");
   return { success: true, cycleId: newCycle[0].id };
 }
 
@@ -157,7 +157,7 @@ export async function updateStage(formData: FormData) {
     })
     .where(eq(applicationCycleStages.id, stageId));
 
-  revalidatePath("/admin/cycles");
+  revalidatePath("/cycles");
   return { success: true };
 }
 
@@ -175,7 +175,7 @@ export async function updateCycleStage(
     })
     .where(eq(applicationCycles.id, cycleId));
 
-  revalidatePath("/admin/cycles");
+  revalidatePath("/cycles");
   return { success: true };
 }
 
@@ -190,6 +190,6 @@ export async function deleteCycle(cycleId: string) {
   // Delete the cycle
   await db.delete(applicationCycles).where(eq(applicationCycles.id, cycleId));
 
-  revalidatePath("/admin/cycles");
+  revalidatePath("/cycles");
   return { success: true };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { api } from "~/trpc/react";
 import type { RouterOutputs } from "~/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -52,7 +52,7 @@ export function EventsList() {
   const updateMutation = api.events.updateEvent.useMutation({
     onSuccess: () => {
       setEditDialogOpen(false);
-      setEditEvent(null);
+      setEditEventId(null);
       void refetch();
     },
   });
@@ -74,7 +74,7 @@ export function EventsList() {
     location: "",
   });
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editEvent, setEditEvent] = useState<Event | null>(null);
+  const [editEventId, setEditEventId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
     name: "",
     description: "",
@@ -84,18 +84,6 @@ export function EventsList() {
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (editEvent) {
-      setEditForm({
-        name: editEvent.name,
-        description: editEvent.description ?? "",
-        startTime: new Date(editEvent.startTime).toISOString().slice(0, 16),
-        endTime: new Date(editEvent.endTime).toISOString().slice(0, 16),
-        location: editEvent.location ?? "",
-      });
-    }
-  }, [editEvent]);
 
   if (userLoading || isLoading) return <div>Loading events...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -161,7 +149,18 @@ export function EventsList() {
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          setEditEvent(e);
+                          setEditEventId(e.id);
+                          setEditForm({
+                            name: e.name,
+                            description: e.description ?? "",
+                            startTime: new Date(e.startTime)
+                              .toISOString()
+                              .slice(0, 16),
+                            endTime: new Date(e.endTime)
+                              .toISOString()
+                              .slice(0, 16),
+                            location: e.location ?? "",
+                          });
                           setEditDialogOpen(true);
                         }}
                       >
@@ -296,9 +295,9 @@ export function EventsList() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (!editEvent) return;
+                  if (!editEventId) return;
                   updateMutation.mutate({
-                    id: editEvent.id,
+                    id: editEventId,
                     data: {
                       name: editForm.name,
                       description: editForm.description,

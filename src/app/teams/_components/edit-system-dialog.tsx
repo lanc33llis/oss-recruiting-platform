@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -33,16 +33,20 @@ export function EditSystemDialog({
   const [state, formAction] = useFormState(editSystem, initialState);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (!state) return;
-    if (state.message) {
-      if (state.errors && Object.keys(state.errors).length > 0) {
-        toast.error(state.message);
-      } else {
-        toast.success(state.message);
-        setOpen(false);
-      }
+  const handleStateChange = useEffectEvent(() => {
+    if (!state?.message) return;
+
+    if (state.errors && Object.keys(state.errors).length > 0) {
+      toast.error(state.message);
+      return;
     }
+
+    toast.success(state.message);
+    setOpen(false);
+  });
+
+  useEffect(() => {
+    handleStateChange();
   }, [state]);
 
   return (
