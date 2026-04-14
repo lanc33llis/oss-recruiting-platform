@@ -96,7 +96,7 @@ export default async function ApplicationsPage() {
       </div>
       <div className="absolute left-0 w-full border-b" />
       <div className="flex flex-col">
-        {/* {cycles.map((cycle) => {
+        {cycles.map((cycle) => {
           const openForApplications =
             cycle.stage === "APPLICATION" &&
             cycle.startDate < new Date() &&
@@ -195,14 +195,7 @@ export default async function ApplicationsPage() {
               <div className="absolute left-0 w-full border-b pt-4" />
             </div>
           );
-        })} */
-        
-        
-        
-        "Applications for the 2025-26 cycle are closed. All further communication will be via email. Thank you for your patience."
-        
-        
-        }
+        })}
       </div>
     </>
   );
