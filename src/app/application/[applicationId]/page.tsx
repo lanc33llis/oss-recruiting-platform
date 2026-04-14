@@ -65,7 +65,7 @@ const AppPage = async ({
       </div>
       <div className="absolute left-0 w-full border-b" />
       <div className="pt-4">
-        {/* {application.cycle.stage === "APPLICATION" && (
+        {application.cycle.stage === "APPLICATION" && (
           <ApplicationForm
             initial={application.data as object}
             status={application.status}
@@ -166,11 +166,7 @@ const AppPage = async ({
             team={application.team.name}
             name={application.user.name!}
           />
-        )} */
-        
-        
-        "Applications for the 2025-26 cycle are closed. All further communication will be via email. Thank you for your patience."
-        }
+        )}
       </div>
     </>
   );
